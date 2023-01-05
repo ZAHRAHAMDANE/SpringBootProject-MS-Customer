@@ -3,13 +3,13 @@ package com.ensa.mscustomer.services;
 import com.ensa.mscustomer.dao.CustomerRepository;
 import com.ensa.mscustomer.dto.CustomerRequestDto;
 import com.ensa.mscustomer.dto.CustomerResponseDto;
+import com.ensa.mscustomer.exceptions.EntityNotFoundException;
 import com.ensa.mscustomer.entities.Customer;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,7 +35,7 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public CustomerResponseDto findById(Long id) {
-        Customer customer = customerRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer not found"));
+        Customer customer = customerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Customer not found"));
         return modelMapper.map(customer, CustomerResponseDto.class);
     }
 
@@ -59,7 +59,7 @@ public class CustomerServiceImpl implements CustomerService{
             Customer updated = customerRepository.save(customer);
             return modelMapper.map(updated, CustomerResponseDto.class);
         } else {
-            throw new EntityNotFoundException("Customer not found !");
+            throw new EntityNotFoundException("Customer Not Found");
         }
     }
 
